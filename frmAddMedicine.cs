@@ -7,35 +7,65 @@ namespace Quan_ly_Ban_Thuoc
     public partial class frmAddMedicine : Form
     {
         private readonly string _connectionString;
+
         public frmAddMedicine(string connectionString)
         {
             InitializeComponent();
             _connectionString = connectionString;
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // Lấy dữ liệu từ TextBox
+
             string medicineCode = txtCode.Text.Trim();
             string medicineName = txtName.Text.Trim();
             string medicineGroup = txtCategory.Text.Trim();
-            string unitType = txtUnit.Text.Trim();
+            string unitType = cbbUnit.Text.Trim();
+            DateTime expiredDate = dtpExpired.Value;
+            int quantity;
             decimal medicinePrice;
             string medicineContent = txtDescription.Text.Trim();
 
             // Kiểm tra dữ liệu nhập vào
             if (string.IsNullOrEmpty(medicineCode) || string.IsNullOrEmpty(medicineName) ||
-                string.IsNullOrEmpty(medicineGroup) || string.IsNullOrEmpty(unitType) ||
-                !decimal.TryParse(txtPrice.Text.Trim(), out medicinePrice) || medicinePrice <= 0)
+                string.IsNullOrEmpty(medicineGroup) || string.IsNullOrEmpty(unitType))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ và chính xác thông tin thuốc!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin thuốc!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Kiểm tra định dạng số lượng và giá tiền
+            if (!int.TryParse(nudQuantity.Text.Trim(), out quantity) || quantity < 0)
+            {
+                MessageBox.Show("Số lượng phải là số nguyên dương!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!decimal.TryParse(txtPrice.Text.Trim(), out medicinePrice) || medicinePrice <= 0)
+            {
+                MessageBox.Show("Giá tiền phải là số dương!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Kiểm tra ngày hết hạn
+            if (expiredDate <= DateTime.Now)
+            {
+                MessageBox.Show("Ngày hết hạn phải lớn hơn ngày hiện tại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Kiểm tra mã thuốc và tên thuốc
+            if (medicineCode.Length > 50 || medicineName.Length > 100)
+            {
+                MessageBox.Show("Mã thuốc hoặc tên thuốc quá dài!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // Câu lệnh SQL thêm thuốc
             string query = @"
-                INSERT INTO medicine (medicine_code, medicine_name, medicine_group, unit_type, medicine_price, medicine_content)
-                VALUES (@MedicineCode, @MedicineName, @MedicineGroup, @UnitType, @MedicinePrice, @MedicineContent)";
+            INSERT INTO medicine (medicine_code, medicine_name, medicine_group, unit_type, medicine_price, quantity, medicine_expire_date, medicine_content)
+            VALUES (@MedicineCode, @MedicineName, @MedicineGroup, @UnitType, @MedicinePrice, @Quantity, @MedicineExpireDate, @MedicineContent)";
 
             // Kết nối tới SQL Server và thêm dữ liệu
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -48,6 +78,8 @@ namespace Quan_ly_Ban_Thuoc
                 command.Parameters.AddWithValue("@MedicineGroup", medicineGroup);
                 command.Parameters.AddWithValue("@UnitType", unitType);
                 command.Parameters.AddWithValue("@MedicinePrice", medicinePrice);
+                command.Parameters.AddWithValue("@Quantity", quantity);
+                command.Parameters.AddWithValue("@MedicineExpireDate", expiredDate);
                 command.Parameters.AddWithValue("@MedicineContent", medicineContent);
 
                 try
@@ -55,14 +87,11 @@ namespace Quan_ly_Ban_Thuoc
                     connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
 
-                    MessageBox.Show($"Thêm thành công {rowsAffected} dòng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Xóa dữ liệu trên form sau khi thêm thành công
-                    ClearForm();
+                    MessageBox.Show($"Thêm dữ liệu thuốc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (SqlException ex)
                 {
-                    if (ex.Number == 2627) // Vi phạm khóa chính hoặc UNIQUE
+                    if (ex.Number == 2627)
                     {
                         MessageBox.Show("Mã thuốc hoặc tên thuốc đã tồn tại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -78,13 +107,14 @@ namespace Quan_ly_Ban_Thuoc
             }
         }
 
-        // Phương thức xóa dữ liệu trên Form
         private void ClearForm()
         {
             txtCode.Clear();
             txtName.Clear();
             txtCategory.Clear();
-            txtUnit.Clear();
+            cbbUnit.Items.Clear();
+            nudQuantity.Value = 0;
+            dtpExpired.Value = DateTime.Now;
             txtPrice.Clear();
             txtDescription.Clear();
             txtCode.Focus();

@@ -39,9 +39,17 @@ namespace Quan_ly_Ban_Thuoc
 
         private void LoadData()
         {
-            string query = "SELECT medicine_code AS [Mã Thuốc], medicine_name AS [Tên Thuốc], " +
-                           "medicine_group AS [Nhóm Thuốc], unit_type AS [Đơn Vị], " +
-                           "medicine_price AS [Giá], medicine_content AS [Nội Dung] FROM medicine";
+            string query = @"SELECT 
+                        medicine_code AS [Mã Thuốc], 
+                        medicine_name AS [Tên Thuốc], 
+                        medicine_group AS [Nhóm Thuốc], 
+                        unit_type AS [Đơn Vị], 
+                        quantity AS [Số Lượng],
+                        medicine_expire_date AS [Ngày Hết Hạn],
+                        medicine_price AS [Giá], 
+                        medicine_content AS [Nội Dung] 
+                     FROM medicine";
+
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 try
@@ -72,6 +80,7 @@ namespace Quan_ly_Ban_Thuoc
                 }
             }
         }
+
 
 
         private void dgvMedicineData_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -126,22 +135,87 @@ namespace Quan_ly_Ban_Thuoc
         {
             if (e.RowIndex >= 0)
             {
-                string medicineCode = dgvMedicineData.Rows[e.RowIndex].Cells["Mã Thuốc"].Value.ToString();
-                string medicineName = dgvMedicineData.Rows[e.RowIndex].Cells["Tên Thuốc"].Value.ToString();
-                string medicineGroup = dgvMedicineData.Rows[e.RowIndex].Cells["Nhóm Thuốc"].Value.ToString();
-                string unitType = dgvMedicineData.Rows[e.RowIndex].Cells["Đơn Vị"].Value.ToString();
-                decimal price = Convert.ToDecimal(dgvMedicineData.Rows[e.RowIndex].Cells["Giá"].Value);
-                string content = dgvMedicineData.Rows[e.RowIndex].Cells["Nội Dung"].Value.ToString();
+                try
+                {
+                    string medicineCode = dgvMedicineData.Rows[e.RowIndex].Cells["Mã Thuốc"].Value.ToString();
+                    string medicineName = dgvMedicineData.Rows[e.RowIndex].Cells["Tên Thuốc"].Value.ToString();
+                    string medicineGroup = dgvMedicineData.Rows[e.RowIndex].Cells["Nhóm Thuốc"].Value.ToString();
+                    string unitType = dgvMedicineData.Rows[e.RowIndex].Cells["Đơn Vị"].Value.ToString();
 
-                UpdateMedicine(medicineCode, medicineName, medicineGroup, unitType, price, content);
+                    if (string.IsNullOrWhiteSpace(medicineCode))
+                    {
+                        MessageBox.Show("Mã thuốc không được để trống!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(medicineName))
+                    {
+                        MessageBox.Show("Tên thuốc không được để trống!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(medicineGroup))
+                    {
+                        MessageBox.Show("Nhóm thuốc không được để trống!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(unitType))
+                    {
+                        MessageBox.Show("Đơn vị thuốc không được để trống!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (!int.TryParse(dgvMedicineData.Rows[e.RowIndex].Cells["Số Lượng"].Value.ToString(), out int quantity) || quantity < 0)
+                    {
+                        MessageBox.Show("Số lượng phải là số nguyên và không âm!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Validate Ngày Hết Hạn (Phải là ngày hợp lệ và không được nhỏ hơn ngày hiện tại)
+                    if (!DateTime.TryParse(dgvMedicineData.Rows[e.RowIndex].Cells["Ngày Hết Hạn"].Value.ToString(), out DateTime expiredDate) || expiredDate < DateTime.Now.Date)
+                    {
+                        MessageBox.Show("Ngày hết hạn phải là ngày hợp lệ và không nhỏ hơn ngày hiện tại!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (!decimal.TryParse(dgvMedicineData.Rows[e.RowIndex].Cells["Giá"].Value.ToString(), out decimal price) || price <= 0)
+                    {
+                        MessageBox.Show("Giá thuốc phải là số dương!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    string content = dgvMedicineData.Rows[e.RowIndex].Cells["Nội Dung"].Value.ToString();
+                    if (content.Length > 255) // Giới hạn độ dài nội dung
+                    {
+                        MessageBox.Show("Nội dung thuốc không được vượt quá 255 ký tự!", "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    UpdateMedicine(medicineCode, medicineName, medicineGroup, unitType, quantity, expiredDate, price, content);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi xử lý dữ liệu: " + ex.Message, "Thông báo lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void UpdateMedicine(string code, string name, string group, string unit, decimal price, string content)
+
+
+        private void UpdateMedicine(string code, string name, string group, string unit, int quantity, DateTime expiredDate, decimal price, string content)
         {
-            string query = "UPDATE medicine SET medicine_name = @Name, medicine_group = @Group, " +
-                           "unit_type = @Unit, medicine_price = @Price, medicine_content = @Content " +
-                           "WHERE medicine_code = @Code";
+            string query = @"UPDATE medicine 
+                     SET 
+                        medicine_name = @Name, 
+                        medicine_group = @Group, 
+                        unit_type = @Unit, 
+                        quantity = @Quantity, 
+                        medicine_expire_date = @ExpiredDate, 
+                        medicine_price = @Price, 
+                        medicine_content = @Content 
+                     WHERE 
+                        medicine_code = @Code";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -154,6 +228,8 @@ namespace Quan_ly_Ban_Thuoc
                     command.Parameters.AddWithValue("@Name", name);
                     command.Parameters.AddWithValue("@Group", group);
                     command.Parameters.AddWithValue("@Unit", unit);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@ExpiredDate", expiredDate);
                     command.Parameters.AddWithValue("@Price", price);
                     command.Parameters.AddWithValue("@Content", content);
 
@@ -167,6 +243,9 @@ namespace Quan_ly_Ban_Thuoc
             }
         }
 
-        
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadData();
+        }
     }
 }

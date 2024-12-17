@@ -26,7 +26,9 @@
             this.lblPassword = new System.Windows.Forms.Label();
             this.panel = new System.Windows.Forms.Panel();
             this.ckPassword = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnLogin
@@ -35,7 +37,7 @@
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(86, 310);
+            this.btnLogin.Location = new System.Drawing.Point(58, 328);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(131, 40);
             this.btnLogin.TabIndex = 2;
@@ -49,7 +51,7 @@
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(254, 310);
+            this.btnExit.Location = new System.Drawing.Point(252, 328);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(120, 40);
             this.btnExit.TabIndex = 3;
@@ -61,7 +63,7 @@
             // 
             this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtUsername.ForeColor = System.Drawing.Color.Gray;
-            this.txtUsername.Location = new System.Drawing.Point(103, 149);
+            this.txtUsername.Location = new System.Drawing.Point(24, 44);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(260, 30);
             this.txtUsername.TabIndex = 0;
@@ -71,7 +73,7 @@
             // 
             this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtPassword.ForeColor = System.Drawing.Color.Gray;
-            this.txtPassword.Location = new System.Drawing.Point(103, 226);
+            this.txtPassword.Location = new System.Drawing.Point(24, 121);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(260, 30);
@@ -83,7 +85,7 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.Teal;
-            this.lblTitle.Location = new System.Drawing.Point(79, 29);
+            this.lblTitle.Location = new System.Drawing.Point(51, 41);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(336, 37);
             this.lblTitle.TabIndex = 4;
@@ -94,7 +96,7 @@
             // 
             this.lblUsername.AutoSize = true;
             this.lblUsername.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblUsername.Location = new System.Drawing.Point(99, 123);
+            this.lblUsername.Location = new System.Drawing.Point(20, 18);
             this.lblUsername.Name = "lblUsername";
             this.lblUsername.Size = new System.Drawing.Size(124, 23);
             this.lblUsername.TabIndex = 5;
@@ -104,7 +106,7 @@
             // 
             this.lblPassword.AutoSize = true;
             this.lblPassword.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblPassword.Location = new System.Drawing.Point(99, 200);
+            this.lblPassword.Location = new System.Drawing.Point(20, 95);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(82, 23);
             this.lblPassword.TabIndex = 6;
@@ -117,13 +119,13 @@
             this.panel.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel.Location = new System.Drawing.Point(0, 0);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(517, 100);
+            this.panel.Size = new System.Drawing.Size(435, 100);
             this.panel.TabIndex = 7;
             // 
             // ckPassword
             // 
             this.ckPassword.AutoSize = true;
-            this.ckPassword.Location = new System.Drawing.Point(103, 263);
+            this.ckPassword.Location = new System.Drawing.Point(24, 158);
             this.ckPassword.Name = "ckPassword";
             this.ckPassword.Size = new System.Drawing.Size(114, 20);
             this.ckPassword.TabIndex = 8;
@@ -131,18 +133,27 @@
             this.ckPassword.UseVisualStyleBackColor = true;
             this.ckPassword.CheckedChanged += new System.EventHandler(this.ckPassword_CheckedChanged);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lblUsername);
+            this.groupBox1.Controls.Add(this.ckPassword);
+            this.groupBox1.Controls.Add(this.txtUsername);
+            this.groupBox1.Controls.Add(this.txtPassword);
+            this.groupBox1.Controls.Add(this.lblPassword);
+            this.groupBox1.Location = new System.Drawing.Point(58, 113);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(314, 189);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            // 
             // frmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(517, 384);
-            this.Controls.Add(this.ckPassword);
+            this.ClientSize = new System.Drawing.Size(435, 401);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel);
-            this.Controls.Add(this.lblPassword);
-            this.Controls.Add(this.lblUsername);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.txtUsername);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -151,8 +162,9 @@
             this.Text = "Đăng nhập hệ thống";
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -167,5 +179,6 @@
         private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.CheckBox ckPassword;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

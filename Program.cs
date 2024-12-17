@@ -13,8 +13,8 @@ namespace Quan_ly_Ban_Thuoc
         /// </summary>
         [STAThread]
         static void Main()
-        {
-            string connectionString = @"Data Source=LAPTOP-H0J8DGVP\SQLEXPRESS;Initial Catalog=pharmacy;Integrated Security=True;TrustServerCertificate=True;";
+        {   // đổi tên SQL ở data Source= để sử dụng csdl 
+            string connectionString = @"Data Source=.;Initial Catalog=pharmacy;Integrated Security=True;TrustServerCertificate=True;";
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

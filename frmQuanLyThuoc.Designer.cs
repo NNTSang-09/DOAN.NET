@@ -28,26 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbFilter = new System.Windows.Forms.ComboBox();
             this.txtHeader = new System.Windows.Forms.Label();
-            this.txtSearch = new System.Windows.Forms.TextBox();
             this.dgvMedicineData = new System.Windows.Forms.DataGridView();
-            this.btnRefresh = new System.Windows.Forms.PictureBox();
             this.btnHome = new System.Windows.Forms.PictureBox();
+            this.btnRefresh = new System.Windows.Forms.PictureBox();
             this.btnAdd = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMedicineData)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnHome)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).BeginInit();
             this.SuspendLayout();
-            // 
-            // cbFilter
-            // 
-            this.cbFilter.FormattingEnabled = true;
-            this.cbFilter.Location = new System.Drawing.Point(334, 61);
-            this.cbFilter.Name = "cbFilter";
-            this.cbFilter.Size = new System.Drawing.Size(88, 24);
-            this.cbFilter.TabIndex = 13;
             // 
             // txtHeader
             // 
@@ -58,13 +48,6 @@
             this.txtHeader.Size = new System.Drawing.Size(216, 25);
             this.txtHeader.TabIndex = 11;
             this.txtHeader.Text = "Quản lý thông tin thuốc";
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Location = new System.Drawing.Point(428, 61);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(277, 22);
-            this.txtSearch.TabIndex = 8;
             // 
             // dgvMedicineData
             // 
@@ -88,17 +71,6 @@
             this.dgvMedicineData.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMedicineData_CellClick);
             this.dgvMedicineData.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMedicineData_CellEndEdit);
             // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnRefresh.Image = global::Quan_ly_Ban_Thuoc.Properties.Resources.analysis_analytics_magnifier_search_locate_magnifyng_glass_icon_153884;
-            this.btnRefresh.Location = new System.Drawing.Point(303, 60);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(25, 25);
-            this.btnRefresh.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.btnRefresh.TabIndex = 12;
-            this.btnRefresh.TabStop = false;
-            // 
             // btnHome
             // 
             this.btnHome.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -110,6 +82,18 @@
             this.btnHome.TabIndex = 9;
             this.btnHome.TabStop = false;
             this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRefresh.Image = global::Quan_ly_Ban_Thuoc.Properties.Resources.icons8_refresh_40;
+            this.btnRefresh.Location = new System.Drawing.Point(109, 61);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(35, 35);
+            this.btnRefresh.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnRefresh.TabIndex = 9;
+            this.btnRefresh.TabStop = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // btnAdd
             // 
@@ -129,18 +113,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1282, 743);
             this.Controls.Add(this.dgvMedicineData);
-            this.Controls.Add(this.cbFilter);
-            this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.txtHeader);
             this.Controls.Add(this.btnHome);
+            this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.txtSearch);
             this.Name = "frmQuanLyThuoc";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmQuanLyThuoc";
+            this.Text = "Quản lý thuốc";
             ((System.ComponentModel.ISupportInitialize)(this.dgvMedicineData)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnHome)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnRefresh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnAdd)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -148,13 +130,10 @@
         }
 
         #endregion
-
-        public System.Windows.Forms.ComboBox cbFilter;
-        public System.Windows.Forms.PictureBox btnRefresh;
         public System.Windows.Forms.Label txtHeader;
         public System.Windows.Forms.PictureBox btnAdd;
-        public System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.DataGridView dgvMedicineData;
         public System.Windows.Forms.PictureBox btnHome;
+        public System.Windows.Forms.PictureBox btnRefresh;
     }
 }
