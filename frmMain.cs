@@ -112,6 +112,7 @@ namespace Quan_ly_Ban_Thuoc
             LoadProductData();
         }
 
+        // Lấy sự kiện click vào phần tử
         private void listViewMedicines_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewMedicines.SelectedItems.Count > 0)
@@ -166,7 +167,7 @@ namespace Quan_ly_Ban_Thuoc
             }
         }
 
-
+        // Bắt sự kiện thay đổi số lượng trong đơn hàng
         private void dgvProductCart_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && dgvProductCart.Columns[e.ColumnIndex].Name == "dgvQuantity")
@@ -179,7 +180,7 @@ namespace Quan_ly_Ban_Thuoc
                     // Lấy số lượng (quantity) và giá tiền (price)
                     int quantity = Convert.ToInt32(row.Cells["dgvQuantity"].Value);
                     float price = Convert.ToSingle(row.Cells["dgvPrice"].Value);
-                    int stockQuantity = GetStockQuantity(row.Cells["dgvCode"].Value.ToString()); // Lấy số lượng tồn kho từ cơ sở dữ liệu hoặc danh sách
+                    int stockQuantity = GetStockQuantity(row.Cells["dgvCode"].Value.ToString()); // Lấy số lượng tồn kho từ cơ sở dữ liệu
 
                     // Kiểm tra số lượng hợp lệ
                     if (quantity <= 0)
@@ -195,7 +196,6 @@ namespace Quan_ly_Ban_Thuoc
                         quantity = stockQuantity;
                     }
 
-                    // Tính toán lại thành tiền
                     float totalPrice = quantity * price;
                     row.Cells["dgvAmount"].Value = totalPrice;
                     lblTotal.Text = $"{GetTotalOrderAmount():C}";
@@ -218,11 +218,12 @@ namespace Quan_ly_Ban_Thuoc
                 cmd.Parameters.AddWithValue("@medicineCode", medicineCode);
 
                 conn.Open();
-                object result = cmd.ExecuteScalar();
+                var result = cmd.ExecuteScalar();
                 return result != null ? Convert.ToInt32(result) : 0;
             }
         }
 
+        // Tính tổng đơn hàng
         private float GetTotalOrderAmount()
         {
             float totalAmount = 0;
@@ -241,7 +242,7 @@ namespace Quan_ly_Ban_Thuoc
 
 
 
-
+        // Xóa khỏi đơn hàng
         private void dgvProductCart_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
@@ -260,6 +261,7 @@ namespace Quan_ly_Ban_Thuoc
             }
         }
 
+        // Làm sạch đơn hàng
         private void btnCancel_Click(object sender, EventArgs e)
         {
             if (dgvProductCart.Rows.Count > 0)
@@ -281,6 +283,7 @@ namespace Quan_ly_Ban_Thuoc
             }
         }
 
+        // Thanh toán và trừ số lượng thuốc trong kho
         private void btnPayment_Click(object sender, EventArgs e)
         {
             try
@@ -313,7 +316,6 @@ namespace Quan_ly_Ban_Thuoc
 
                 
 
-                // Hiển thị thông báo thành công
                 MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LoadProductData();
@@ -327,7 +329,7 @@ namespace Quan_ly_Ban_Thuoc
             }
         }
 
-
+        // Cập nhật lại số lượng thuốc trong kho
         private void UpdateMedicineQuantity(string medicineCode, int quantitySold)
         {
             string query = "UPDATE medicine SET quantity = quantity - @QuantitySold WHERE medicine_code = @MedicineCode";

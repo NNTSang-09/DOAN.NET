@@ -202,7 +202,6 @@ namespace Quan_ly_Ban_Thuoc
         }
 
 
-
         private void UpdateMedicine(string code, string name, string group, string unit, int quantity, DateTime expiredDate, decimal price, string content)
         {
             string query = @"UPDATE medicine 

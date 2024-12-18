@@ -2,6 +2,7 @@
 USE pharmacy
 
 CREATE TABLE medicine (
+    id INT IDENTITY(1,1) PRIMARY KEY,
     medicine_code VARCHAR(50) PRIMARY KEY,      
     medicine_name NVARCHAR(100) UNIQUE, 
     medicine_group NVARCHAR(50),

@@ -47,13 +47,12 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.cbbUnit = new System.Windows.Forms.ComboBox();
-            this.nudQuantity = new System.Windows.Forms.NumericUpDown();
             this.dtpExpired = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.nudQuantity = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -246,26 +245,24 @@
             "Vĩ",
             "Hộp",
             "Chai",
-            "viên"});
+            "viên nang",
+            "Viên nén",
+            "Dung dịch tiêm",
+            "Bình xịt",
+            "Kem bôi"});
             this.cbbUnit.Location = new System.Drawing.Point(341, 176);
             this.cbbUnit.Name = "cbbUnit";
             this.cbbUnit.Size = new System.Drawing.Size(100, 24);
             this.cbbUnit.TabIndex = 37;
-            // 
-            // nudQuantity
-            // 
-            this.nudQuantity.Location = new System.Drawing.Point(33, 246);
-            this.nudQuantity.Name = "nudQuantity";
-            this.nudQuantity.Size = new System.Drawing.Size(100, 22);
-            this.nudQuantity.TabIndex = 38;
             // 
             // dtpExpired
             // 
             this.dtpExpired.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpExpired.Location = new System.Drawing.Point(181, 246);
             this.dtpExpired.Name = "dtpExpired";
-            this.dtpExpired.Size = new System.Drawing.Size(123, 22);
+            this.dtpExpired.Size = new System.Drawing.Size(117, 22);
             this.dtpExpired.TabIndex = 39;
+            this.dtpExpired.Value = new System.DateTime(2024, 12, 18, 0, 0, 0, 0);
             // 
             // label9
             // 
@@ -287,6 +284,14 @@
             this.label10.TabIndex = 7;
             this.label10.Text = "Đơn vị";
             // 
+            // nudQuantity
+            // 
+            this.nudQuantity.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudQuantity.Location = new System.Drawing.Point(33, 246);
+            this.nudQuantity.Name = "nudQuantity";
+            this.nudQuantity.Size = new System.Drawing.Size(131, 27);
+            this.nudQuantity.TabIndex = 18;
+            // 
             // frmAddMedicine
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -294,13 +299,13 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(566, 448);
             this.Controls.Add(this.dtpExpired);
-            this.Controls.Add(this.nudQuantity);
             this.Controls.Add(this.cbbUnit);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.txtDescription);
+            this.Controls.Add(this.nudQuantity);
             this.Controls.Add(this.txtPrice);
             this.Controls.Add(this.txtCategory);
             this.Controls.Add(this.txtCode);
@@ -319,7 +324,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -346,9 +350,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.ComboBox cbbUnit;
-        private System.Windows.Forms.NumericUpDown nudQuantity;
         private System.Windows.Forms.DateTimePicker dtpExpired;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox nudQuantity;
     }
 }
