@@ -283,7 +283,7 @@ namespace Quan_ly_Ban_Thuoc
             }
         }
 
-        // Thanh toán và trừ số lượng thuốc trong kho
+        // Thanh toán và trừ số lượng thuốc trong kho, thêm dữ liệu vào bảng order
         private void btnPayment_Click(object sender, EventArgs e)
         {
             try
@@ -314,10 +314,10 @@ namespace Quan_ly_Ban_Thuoc
                     }
                 }
 
-                
+                AddInvoice(totalAmount, _user.Username);
 
                 MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                PrintInvoice();
                 LoadProductData();
                 dgvProductCart.Rows.Clear();
                 txtKhachTra.Clear();
@@ -355,6 +355,115 @@ namespace Quan_ly_Ban_Thuoc
                 }
             }
         }
+
+        private void AddInvoice(float amount, string employeeName)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    string query = @"
+                            INSERT INTO sale (created_at, amount, employee)
+                            VALUES (@createdAt, @amount, @employee)";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Thêm tham số
+                        command.Parameters.AddWithValue("@createdAt", DateTime.Now);
+                        command.Parameters.AddWithValue("@amount", amount);
+                        command.Parameters.AddWithValue("@employee", employeeName);
+
+                        command.ExecuteNonQuery();
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi thêm hóa đơn: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnQLThuocHetHan_Click(object sender, EventArgs e)
+        {
+            frmQLThuocHetHan frmQLThuocHet = new frmQLThuocHetHan(_connectionString, _user);
+            frmQLThuocHet.Show();
+            this.Hide();
+        }
+
+        private void btnBaoCaoDoanhThu_Click(object sender, EventArgs e)
+        {
+            frmBaoCaoDoanhThu doanhThuView = new frmBaoCaoDoanhThu(_connectionString, _user);
+            doanhThuView.Show();
+            this.Hide();
+        }
+
+        private void PrintInvoice()
+        {
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrintPage += new PrintPageEventHandler(PrintPage);
+            PrintPreviewDialog previewDialog = new PrintPreviewDialog
+            {
+                Document = printDoc
+            };
+            previewDialog.ShowDialog();
+        }
+
+        private void PrintPage(object sender, PrintPageEventArgs e)
+        {
+            float leftMargin = e.MarginBounds.Left;
+            float topMargin = e.MarginBounds.Top;
+            Font printFont = new Font("Arial", 10);
+            Font boldFont = new Font("Arial", 12, FontStyle.Bold);
+            float yPos = topMargin;
+
+            // In tiêu đề (căn giữa tiêu đề)
+            string title = "HÓA ĐƠN BÁN HÀNG";
+            SizeF titleSize = e.Graphics.MeasureString(title, boldFont);
+            e.Graphics.DrawString(title, boldFont, Brushes.Black, (e.MarginBounds.Width - titleSize.Width) / 2, yPos);
+            yPos += titleSize.Height + 10; // Khoảng cách giữa tiêu đề và thông tin đơn hàng
+
+            // In thông tin đơn hàng
+            e.Graphics.DrawString($"Nhân viên: {_user.Username}", printFont, Brushes.Black, leftMargin, yPos);
+            yPos += 20;
+            e.Graphics.DrawString($"Ngày: {DateTime.Now:dd/MM/yyyy HH:mm}", printFont, Brushes.Black, leftMargin, yPos);
+            yPos += 30;
+
+            // In chi tiết các sản phẩm trong giỏ hàng
+            e.Graphics.DrawString("Mã thuốc\tTên thuốc\tSố lượng\tGiá\tThành tiền", printFont, Brushes.Black, leftMargin, yPos);
+            yPos += 20;
+
+            // Cải thiện việc in thông tin giỏ hàng để dễ đọc hơn
+            foreach (DataGridViewRow row in dgvProductCart.Rows)
+            {
+                string code = row.Cells["dgvCode"].Value.ToString();
+                string name = row.Cells["dgvName"].Value.ToString();
+                int quantity = Convert.ToInt32(row.Cells["dgvQuantity"].Value);
+                float price = Convert.ToSingle(row.Cells["dgvPrice"].Value);
+                float total = Convert.ToSingle(row.Cells["dgvAmount"].Value);
+
+                string line = $"{code,-25}{name,-23}{quantity,-26}{price,-16}{total,-10}";
+                e.Graphics.DrawString(line, printFont, Brushes.Black, leftMargin, yPos);
+                yPos += 20;
+            }
+
+            // In tổng tiền
+            e.Graphics.DrawString($"Tổng tiền: {GetTotalOrderAmount():C}", boldFont, Brushes.Black, leftMargin, yPos);
+            yPos += 30;
+
+            // In thông tin thanh toán
+            e.Graphics.DrawString($"Khách trả: {txtKhachTra.Text}", printFont, Brushes.Black, leftMargin, yPos);
+            yPos += 20;
+
+            float change = float.Parse(txtKhachTra.Text) - GetTotalOrderAmount();
+            e.Graphics.DrawString($"Tiền thối lại: {change:C}", printFont, Brushes.Black, leftMargin, yPos);
+
+            // Chỉ định rằng không có trang tiếp theo
+            e.HasMorePages = false;
+        }
+
 
     }
 }

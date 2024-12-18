@@ -14,7 +14,7 @@ namespace Quan_ly_Ban_Thuoc
         [STAThread]
         static void Main()
         {   // đổi tên SQL ở data Source= để sử dụng csdl 
-            string connectionString = @"Data Source=.;Initial Catalog=pharmacy;Integrated Security=True;TrustServerCertificate=True;";
+            string connectionString = @"Data Source=LIB-SV304\SQL;Initial Catalog=pharmacy;Integrated Security=True;TrustServerCertificate=True;";
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

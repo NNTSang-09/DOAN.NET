@@ -32,10 +32,7 @@ namespace Quan_ly_Ban_Thuoc
             {
                 AutoFillData(medicineRow); // Tự động điền dữ liệu vào form
             }
-            else
-            {
-                MessageBox.Show("Không tìm thấy thông tin thuốc!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            
         }
 
         private void AutoFillData(DataRow medicineRow)
